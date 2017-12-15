@@ -16,16 +16,18 @@ def authenticate_user(reddit_username, reddit_password,
                          password=reddit_password,
                          user_agent="comments-purger")
 
-    return reddit if reddit.user.me() == reddit_username else None
+    return reddit.user.me() if reddit.user.me() == reddit_username else None
 
 
-def delete_comments(reddit):
+def delete_comments(redditor):
     '''
     Deletes comments for a reddit user
-    reddit: PRAW reddit instance
+    reddit: PRAW reddit user instance
     '''
-    # TODO: querying & deleting comments
-    pass
+
+    for comment in redditor.comments.new(limit=None):
+        comment.edit("-")
+        comment.delete()
 
 
 def main(args):
@@ -41,11 +43,11 @@ def main(args):
     credentials = None
     with open(options['credential_file_path']) as credential_file:
         credentials = json.load(credential_file)
-    reddit = authenticate_user(credentials['username'], credentials['password'],
-                               credentials['client-id'], credentials['client-secret'])
+    redditor = authenticate_user(credentials['username'], credentials['password'],
+                                 credentials['client-id'], credentials['client-secret'])
 
     # Deleting comments
-    delete_comments(reddit)
+    delete_comments(redditor)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
