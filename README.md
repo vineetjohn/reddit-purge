@@ -1,2 +1,3 @@
-# reddit-purge
-Overwrite and delete personal comments on Reddit.com
+# Reddit Purge
+
+Python script to overwrite and delete personal comments on Reddit.com
