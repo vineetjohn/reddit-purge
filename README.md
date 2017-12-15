@@ -1,7 +1,8 @@
 # Reddit Purge
 
-Python script to overwrite and delete personal comments on Reddit.com
-Written after of the forced profile format change (December, 2017)
+Python script to overwrite and delete personal comments on reddit.com.
+
+Written after of the forced profile format change (December, 2017).
 
 ## Pre-requisites
 
@@ -32,3 +33,5 @@ pip install -r requirements.txt
 ```bash
 python comments_purge.py --credential-file-path config/credentials.json
 ```
+
+* Profit?
