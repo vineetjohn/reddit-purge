@@ -41,13 +41,19 @@ def main(args):
 
     # Authenticating user
     credentials = None
+    print("Reading credentials")
     with open(options['credential_file_path']) as credential_file:
         credentials = json.load(credential_file)
+
+    print("Authenticating user")
     redditor = authenticate_user(credentials['username'], credentials['password'],
                                  credentials['client-id'], credentials['client-secret'])
+    print("Authentication successful")
 
     # Deleting comments
+    print("Processing comments ...")
     delete_comments(redditor)
+    print("Comment deletion completed!")
 
 if __name__ == '__main__':
     main(sys.argv[1:])
