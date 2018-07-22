@@ -25,7 +25,8 @@ def delete_comments(redditor):
     reddit: PRAW reddit user instance
     '''
 
-    for comment in redditor.comments.new(limit=None):
+    for index, comment in enumerate(redditor.comments.new(limit=None)):
+        print("Deleting comment {}".format(index))
         comment.edit("-")
         comment.delete()
 
