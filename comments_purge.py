@@ -15,6 +15,7 @@ def authenticate_user(reddit_username, reddit_password,
                          username=reddit_username,
                          password=reddit_password,
                          user_agent="comments-purger")
+    reddit.validate_on_submit = True
 
     return reddit.user.me() if reddit.user.me() == reddit_username else None
 

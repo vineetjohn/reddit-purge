@@ -16,7 +16,7 @@ Written after of the forced profile format change (December, 2017).
 * Clone this repository
 
 ```bash
-clone https://github.com/v1n337/reddit-purge.git
+git clone https://github.com/v1n337/reddit-purge.git
 cd reddit-purge
 ```
 
