@@ -2,7 +2,7 @@
 
 Python script to overwrite and delete personal comments on reddit.com.
 
-Written after of the forced profile format change (December, 2017).
+Written after the forced profile format change (December, 2017).
 
 ## Pre-requisites
 
