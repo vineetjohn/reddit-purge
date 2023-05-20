@@ -32,14 +32,14 @@ def delete_comments(redditor):
         comment.delete()
 
 
-def main(args):
+def main():
     ''' Main function '''
 
     # Parsing command line args
     parser = argparse.ArgumentParser()
     parser.add_argument('--credential-file-path', type=str,
                         help='Path to credential file')
-    options = vars(parser.parse_args(args))
+    options = vars(parser.parse_args())
 
     # Authenticating user
     credentials = None
