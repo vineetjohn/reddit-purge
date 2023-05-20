@@ -1,8 +1,0 @@
-certifi>=2018.8.24
-chardet>=3.0.4
-idna>=2.7
-praw>=6.0.0
-prawcore>=1.0.0
-requests>=2.21.0
-update-checker>=0.16
-urllib3>=1.23

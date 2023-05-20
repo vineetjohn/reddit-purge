@@ -7,7 +7,7 @@ Written after the forced profile format change (December, 2017).
 ## Pre-requisites
 
 * Python
-* Pip
+* [Poetry](https://python-poetry.org/docs/#installation)
 
 ## Usage
 
@@ -16,14 +16,13 @@ Written after the forced profile format change (December, 2017).
 * Clone this repository
 
 ```bash
-git clone https://github.com/v1n337/reddit-purge.git
-cd reddit-purge
+git clone https://github.com/vineetjohn/reddit-purge && cd reddit-purge
 ```
 
 * Install dependencies
 
 ```bash
-pip install -r requirements.txt
+poetry install
 ```
 
 * Add reddit user and app credentials to the ```config/credentials.json``` file
@@ -31,7 +30,7 @@ pip install -r requirements.txt
 * Run script using
 
 ```bash
-python comments_purge.py --credential-file-path config/credentials.json
+poetry run comments_purge --credential-file-path config/credentials.json
 ```
 
 * Profit?
