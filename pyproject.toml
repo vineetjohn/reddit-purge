@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "reddit-purge"
+version = "0.1.0"
+description = "Delete reddit comment history"
+authors = ["Vineet John"]
+license = "https://github.com/vineetjohn/reddit-purge/blob/master/LICENSE"
+readme = "README.md"
+packages = [{include = "reddit_purge"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+praw = "^7.7.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
