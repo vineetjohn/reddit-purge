@@ -43,6 +43,9 @@ def main():
     parser.add_argument(
         "--credential-file-path", type=str, help="Path to credential file"
     )
+    parser.add_argument(
+        "--2fa", action="store_true", help="Use two-factor authentication"
+    )
     options = vars(parser.parse_args())
 
     # Authenticating user
@@ -50,6 +53,8 @@ def main():
     print("Reading credentials")
     with open(options["credential_file_path"]) as credential_file:
         credentials = json.load(credential_file)
+    if options["2fa"]:
+        credentials["password"] += ':' + input("2FA token: ")
 
     print("Authenticating user")
     redditor = authenticate_user(
