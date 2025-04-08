@@ -1,26 +1,29 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "reddit-purge"
 version = "0.1.0"
 description = "Delete reddit comment history"
-authors = ["Vineet John"]
-license = "https://github.com/vineetjohn/reddit-purge/blob/master/LICENSE"
+authors = [
+    {name = "Vineet John"}
+]
+license = {text = "https://github.com/vineetjohn/reddit-purge/blob/master/LICENSE"}
 readme = "README.md"
-packages = [
-    {include = "comments_purge.py"}
+requires-python = ">=3.10"
+dependencies = [
+    "praw>=7.7.0",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-praw = "^7.7.0"
+[project.optional-dependencies]
+dev = [
+    "black>=24.8.0",
+    "pre-commit>=3.8.0",
+]
 
+[project.scripts]
+comments_purge = "comments_purge:main"
 
-[tool.poetry.group.dev.dependencies]
-black = "^24.8.0"
-pre-commit = "^3.8.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-comments_purge = 'comments_purge:main'
+[tool.setuptools]
+py-modules = ["comments_purge"]
