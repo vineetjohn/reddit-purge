@@ -1,4 +1,4 @@
-""" Script to overwrite and delete user comments on reddit.com """
+"""Script to overwrite and delete user comments on reddit.com"""
 
 import sys
 import argparse

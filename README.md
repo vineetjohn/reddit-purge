@@ -22,7 +22,7 @@ git clone https://github.com/vineetjohn/reddit-purge && cd reddit-purge
 * Install dependencies
 
 ```bash
-poetry install
+uv sync
 ```
 
 * Add reddit user and app credentials to the ```config/credentials.json``` file
@@ -30,7 +30,7 @@ poetry install
 * Run script using
 
 ```bash
-poetry run comments_purge --credential-file-path config/credentials.json
+uv run comments_purge --credential-file-path config/credentials.json
 ```
 
 * Profit?
