@@ -1,17 +1,18 @@
 """Script to overwrite and delete user comments on reddit.com"""
 
-import sys
+import asyncio
 import argparse
 import json
-import praw
+from asyncpraw.models import Redditor, Comment
+from asyncpraw import Reddit
 
 
-def authenticate_user(
+async def authenticate(
     reddit_username, reddit_password, reddit_app_client_id, reddit_app_client_secret
-):
+) -> Reddit:
     """Authenticates user with the PRAW library"""
 
-    reddit = praw.Reddit(
+    reddit = Reddit(
         client_id=reddit_app_client_id,
         client_secret=reddit_app_client_secret,
         username=reddit_username,
@@ -19,23 +20,30 @@ def authenticate_user(
         user_agent="comments-purger",
     )
     reddit.validate_on_submit = True
+    return reddit
 
-    return reddit.user.me() if reddit.user.me() == reddit_username else None
+
+async def delete_comment(idx: int, comment: Comment) -> None:
+    print(f"Deleting comment {idx} ...")
+    await comment.edit("-")
+    await comment.delete()
+    print(f"Deleted comment {idx}")
 
 
-def delete_comments(redditor):
+async def delete_comments(redditor: Redditor) -> None:
     """
     Deletes comments for a reddit user
     reddit: PRAW reddit user instance
     """
 
-    for index, comment in enumerate(redditor.comments.new(limit=None)):
-        print("Deleting comment {}".format(index))
-        comment.edit("-")
-        comment.delete()
+    async with asyncio.TaskGroup() as tg:
+        index = 0
+        async for comment in redditor.comments.new(limit=None):
+            tg.create_task(delete_comment(idx=index, comment=comment))
+            index += 1
 
 
-def main():
+async def async_main():
     """Main function"""
 
     # Parsing command line args
@@ -52,19 +60,26 @@ def main():
         credentials = json.load(credential_file)
 
     print("Authenticating user")
-    redditor = authenticate_user(
+    reddit = await authenticate(
         credentials["username"],
         credentials["password"],
         credentials["client-id"],
         credentials["client-secret"],
     )
-    print("Authentication successful")
 
-    # Deleting comments
-    print("Processing comments ...")
-    delete_comments(redditor)
-    print("Comment deletion completed!")
+    try:
+        redditor: Redditor = await reddit.user.me()
+        if redditor is None:
+            raise RuntimeError(f"Failed to authenticate as {credentials['username']}")
+        print("Authentication successful")
+
+        # Deleting comments
+        print("Processing comments ...")
+        await delete_comments(redditor)
+        print("Comment deletion completed!")
+    finally:
+        await reddit.close()
 
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+def main():
+    asyncio.run(async_main())

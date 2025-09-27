@@ -13,14 +13,11 @@ license = {text = "https://github.com/vineetjohn/reddit-purge/blob/master/LICENS
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "praw>=7.7.0",
+    "asyncpraw>=7.8.1",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "black>=24.8.0",
-    "pre-commit>=3.8.0",
-]
+dev = []
 
 [project.scripts]
 comments_purge = "comments_purge:main"
