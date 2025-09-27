@@ -7,7 +7,7 @@ Written after the forced profile format change (December, 2017).
 ## Pre-requisites
 
 * Python
-* [Poetry](https://python-poetry.org/docs/#installation)
+* [uv](https://docs.astral.sh/uv/)
 
 ## Usage
 
