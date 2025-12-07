@@ -6,6 +6,8 @@ import json
 from asyncpraw.models import Redditor, Comment
 from asyncpraw import Reddit
 
+CONCURRENCY = 3
+
 
 async def authenticate(
     reddit_username, reddit_password, reddit_app_client_id, reddit_app_client_secret
@@ -23,10 +25,13 @@ async def authenticate(
     return reddit
 
 
-async def delete_comment(idx: int, comment: Comment) -> None:
+async def delete_comment(
+    idx: int, comment: Comment, semaphore: asyncio.Semaphore
+) -> None:
     print(f"Deleting comment {idx} ...")
-    await comment.edit("-")
-    await comment.delete()
+    async with semaphore:
+        await comment.edit("-")
+        await comment.delete()
     print(f"Deleted comment {idx}")
 
 
@@ -36,10 +41,13 @@ async def delete_comments(redditor: Redditor) -> None:
     reddit: PRAW reddit user instance
     """
 
+    semaphore = asyncio.Semaphore(CONCURRENCY)
     async with asyncio.TaskGroup() as tg:
         index = 0
         async for comment in redditor.comments.new(limit=None):
-            tg.create_task(delete_comment(idx=index, comment=comment))
+            tg.create_task(
+                delete_comment(idx=index, comment=comment, semaphore=semaphore)
+            )
             index += 1
 
 

@@ -24,3 +24,8 @@ comments_purge = "comments_purge:main"
 
 [tool.setuptools]
 py-modules = ["comments_purge"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.8",
+]
