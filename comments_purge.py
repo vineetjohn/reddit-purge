@@ -6,7 +6,7 @@ import json
 from asyncpraw.models import Redditor, Comment
 from asyncpraw import Reddit
 
-CONCURRENCY = 3
+CONCURRENCY = 1
 
 
 async def authenticate(
