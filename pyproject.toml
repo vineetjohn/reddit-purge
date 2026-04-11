@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.11.6,<0.12"]
+build-backend = "uv_build"
 
 [project]
 name = "reddit-purge"
@@ -20,10 +20,7 @@ dependencies = [
 dev = []
 
 [project.scripts]
-comments_purge = "comments_purge:main"
-
-[tool.setuptools]
-py-modules = ["comments_purge"]
+comments_purge = "reddit_purge.comments_purge:main"
 
 [dependency-groups]
 dev = [
