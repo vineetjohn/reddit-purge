@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reddit-purge"
-version = "0.1.0"
+version = "1.0.0"
 description = "Delete reddit comment history"
 authors = [
     {name = "Vineet John"}
 ]
 license = {text = "https://github.com/vineetjohn/reddit-purge/blob/master/LICENSE"}
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 dependencies = [
     "asyncpraw>=7.8.1",
 ]
@@ -27,5 +27,5 @@ py-modules = ["comments_purge"]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.14.8",
+    "ruff>=0.15.10",
 ]
