@@ -3,6 +3,7 @@
 import asyncio
 import argparse
 import json
+import os
 from asyncpraw.models import Redditor, Comment
 from asyncpraw import Reddit
 
@@ -57,7 +58,10 @@ async def async_main():
     # Parsing command line args
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--credential-file-path", type=str, help="Path to credential file"
+        "--credential-file-path",
+        type=str,
+        default=os.environ.get("CREDENTIAL_FILE_PATH"),
+        help="Path to credential file (env: CREDENTIAL_FILE_PATH)",
     )
     options = vars(parser.parse_args())
 
