@@ -33,4 +33,11 @@ uv sync
 uv run comments_purge --credential-file-path config/credentials.json
 ```
 
+Alternatively, the credential file path can be set via the `CREDENTIAL_FILE_PATH` environment variable:
+
+```bash
+export CREDENTIAL_FILE_PATH=config/credentials.json
+uv run comments_purge
+```
+
 * Profit?
