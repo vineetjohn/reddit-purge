@@ -1,13 +1,24 @@
 """Script to overwrite and delete user comments on reddit.com"""
 
-import asyncio
 import argparse
+import asyncio
 import json
 import os
-from asyncpraw.models import Redditor, Comment
+from datetime import UTC, datetime, timedelta
+
 from asyncpraw import Reddit
+from asyncpraw.models import Comment, Redditor
 
 CONCURRENCY = 1
+
+
+def non_negative_int(value: str) -> int:
+    """argparse type for integer values that must not be negative"""
+
+    ivalue = int(value)
+    if ivalue < 0:
+        raise argparse.ArgumentTypeError(f"must be >= 0, got {ivalue}")
+    return ivalue
 
 
 async def authenticate(
@@ -29,27 +40,30 @@ async def authenticate(
 async def delete_comment(
     idx: int, comment: Comment, semaphore: asyncio.Semaphore
 ) -> None:
-    print(f"Deleting comment {idx} ...")
     async with semaphore:
         await comment.edit("-")
         await comment.delete()
     print(f"Deleted comment {idx}")
 
 
-async def delete_comments(redditor: Redditor) -> None:
+async def delete_comments(redditor: Redditor, cutoff: float) -> None:
     """
-    Deletes comments for a reddit user
+    Deletes comments for a reddit user that are older than the cutoff timestamp
     reddit: PRAW reddit user instance
+    cutoff: unix timestamp; comments created before it are deleted
     """
 
     semaphore = asyncio.Semaphore(CONCURRENCY)
+    index = 0
     async with asyncio.TaskGroup() as tg:
-        index = 0
         async for comment in redditor.comments.new(limit=None):
+            if comment.created_utc >= cutoff:
+                continue
             tg.create_task(
                 delete_comment(idx=index, comment=comment, semaphore=semaphore)
             )
             index += 1
+    print(f"Deleted {index} comment(s)")
 
 
 async def async_main():
@@ -63,7 +77,14 @@ async def async_main():
         default=os.environ.get("CREDENTIAL_FILE_PATH"),
         help="Path to credential file (env: CREDENTIAL_FILE_PATH)",
     )
+    parser.add_argument(
+        "--days-to-retain",
+        type=non_negative_int,
+        default=0,
+        help="Days of comment history to keep; older comments are deleted (default: 0)",
+    )
     options = vars(parser.parse_args())
+    cutoff = datetime.now(UTC) - timedelta(days=options["days_to_retain"])
 
     # Authenticating user
     credentials = None
@@ -86,8 +107,14 @@ async def async_main():
         print("Authentication successful")
 
         # Deleting comments
-        print("Processing comments ...")
-        await delete_comments(redditor)
+        if options["days_to_retain"] == 0:
+            print("Deleting all comments ...")
+        else:
+            print(
+                "Deleting comments created before "
+                f"{cutoff.strftime('%Y-%m-%d %H:%M UTC')} ..."
+            )
+        await delete_comments(redditor, cutoff.timestamp())
         print("Comment deletion completed!")
     finally:
         await reddit.close()

@@ -33,6 +33,14 @@ uv sync
 uv run comments_purge --credential-file-path config/credentials.json
 ```
 
+* Optionally keep only recent history with `--days-to-retain`. Comments older than
+  the given number of days are deleted; anything newer is left untouched. The
+  default is `0`, which deletes the entire comment history:
+
+```bash
+uv run comments_purge --credential-file-path config/credentials.json --days-to-retain 30
+```
+
 Alternatively, the credential file path can be set via the `CREDENTIAL_FILE_PATH` environment variable:
 
 ```bash
